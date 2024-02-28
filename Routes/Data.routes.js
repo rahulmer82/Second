@@ -1,5 +1,5 @@
 const express=require('express')
-const userData=require("../models/data.model.js")
+const userData=require('../Models/data.model.js')
 const fetchuser=require('../midelware/auth.js')
 const routes=express.Router()
 
