@@ -42,6 +42,6 @@ return `${part[0].padStart(2,'0')}/${part[1].padStart(2,'0')}/${part[2]}`
 
         }
     }
-})
+},{timestamps:true})
 
 export const UserData=mongoose.model("UserData",dataSchema)
