@@ -8,7 +8,7 @@ app.use(express.json())
 
 ConnectDb()
 const corsOptions = {
-    origin: "https://http://localhost:3000" // frontend URI (ReactJS)
+    origin: "http://localhost:3000" // frontend URI (ReactJS)
 }
 app.use(cors(corsOptions))
 
