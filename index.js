@@ -4,10 +4,13 @@ import ConnectDb from './db.js'
 import cors from 'cors'
 const app=express()
 dotenv.config()
-app.use(cors())
 app.use(express.json())
 
 ConnectDb()
+const corsOptions = {
+    origin: "https://http://localhost:3000" // frontend URI (ReactJS)
+}
+app.use(cors(corsOptions))
 
 const port=process.env.PORT ||5000
 
