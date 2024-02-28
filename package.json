@@ -2,11 +2,12 @@
   "name": "second",
   "version": "1.0.0",
   "description": "this is the basic server on login",
-  "main": "index.js",
+  "main": "app.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
     "build": "[my-framework] build --output public"
   },
   "author": "rahul mer",
