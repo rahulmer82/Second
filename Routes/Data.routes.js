@@ -1,18 +1,20 @@
 import  express from 'express'
 import {UserData}  from '../Models/data.model.js'
 import fetchuser from '../midelware/auth.js'
+import APIErrors from '../Utils/APIErrors.js'
+import APIRescponce from '../Utils/APIResponce.js'
 const routes=express.Router()
 
 routes.get('/mydata',fetchuser,async(req,res)=>{
 try {
 const data=await UserData.find({user:req.user.id})
 if(!data){
-    res.status(401).send("usedata Not Found")
+    throw new APIErrors(401,'No Data Found')
 }
-res.json(data)
+res.status(201).json(new APIRescponce(201,data,"Data SuccessFully Fetched"))
     
 } catch (error) {
-    res.status(402).send("Internal Server problem")
+    res.status(401).json(new APIErrors(401,error.message,error))
 }
 })
 
@@ -24,12 +26,16 @@ routes.post('/addwork',fetchuser,async(req,res)=>{
 
 
         const Newnote= await new UserData({price,work,user:req.user.id})
+
+        if(!Newnote){
+            throw new APIErrors(401,"Work Data Not Found..")
+        }
        
         const data=await Newnote.save()
-        res.status(201).json(data)
+        res.status(201).json(new APIRescponce(201,data,"Work Added Succesfully"))
         
     } catch (error) {
-        res.status(402).send("Internal Server problem")
+        res.status(402).json(new APIErrors(402,error.message,error))
     }
 
 })
@@ -40,14 +46,13 @@ routes.delete('/delete/:id',fetchuser,async(req,res)=>{
     try {
         let data=await UserData.findById(req.params.id)
         if (!data) {
-            return res.status(400).send("No User is found by this id");
+            throw new APIErrors(401,"This Work Note is not Exist.")
           }
-          console.log("user",data)
           data=await UserData.findByIdAndDelete(req.params.id);
-          res.status(200).json({"sucess: your data ScessFully Deleted":data});
+          res.status(200).json(new APIRescponce(201,data,"Work Deleted Succesfully"));
         
     } catch (error) {
-        res.status(402).send("Internal Server problem")
+        res.status(402).json(new APIRescponce(402,"Internal Server Error Found",error))
     }
 })
 
@@ -63,17 +68,17 @@ routes.put('/update/:id',fetchuser,async(req,res)=>{
 
         let note=await UserData.findById(req.params.id)
       if(!note){
-          return res.status(400).send("Not Found Data")
+          throw new APIErrors(401, "Work Note Not Found")
         }
         if(note.user.toString() !==req.user.id){
-          return res.status(401).send("This is not Valid Action")
+          throw new APIErrors(401,"This Is not Vaid Requiest..")
         };
 
          note=await UserData.findByIdAndUpdate(req.params.id,{$set:newdata},{new:true})
 
-         res.status(201).json({note})
+         res.status(201).json(new APIRescponce(201,note,"Work Not SuccessFully Updated..!"))
     } catch (error) {
-        res.status(402).send("Internal Server problem")
+        res.status(402).json(new APIErrors(401,"Internal Server Errors",error))
     }
 })
 

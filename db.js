@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import APIErrors from './Utils/APIErrors.js'
 
 dotenv.config()
 const ConnectDb=async()=>{
@@ -11,7 +12,7 @@ try {
    
   }
 } catch (error) {
-    console.log(`Databass Conection Faill..`,error)
+    throw new APIErrors(401,"DataBass Can Not Connected",error)
 }
 }
 

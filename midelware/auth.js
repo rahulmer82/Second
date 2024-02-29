@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import APIErrors from '../Utils/APIErrors.js'
 dotenv.config()
 const fetchuser=(req,res,next)=>{
     try {
         let token=req.header("auth-token")
         if(!token){
-            res.status(401).send("Invalid Auth-Token")
+            res.status(401).json(new APIErrors(401,"Login Is Required"))
         }
         
         const data=jwt.verify(token,process.env.JWT_SECRET)
@@ -13,7 +14,7 @@ const fetchuser=(req,res,next)=>{
         next();
         
     } catch (error) {
-        res.status(4001).send("Found A middlwer problem")   
+        res.status(401).json(new APIErrors(401,"Midleware Server Problem found",error))   
     }
 }
 

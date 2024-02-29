@@ -3,6 +3,8 @@ import {User} from '../Models/user.model.js'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import dotenv from 'dotenv'
+import APIErrors from '../Utils/APIErrors.js'
+import APIResponce from '../Utils/APIResponce.js'
 
 const routes=express.Router()
 dotenv.config();
@@ -10,13 +12,13 @@ dotenv.config();
 routes.post('/createuser',async(req,res)=>{
     try {
         
-        let success=false
+    
         let user=await User.findOne({email:req.body.email})
-        console.log(user)
+    
         if(user){
             //User not exist
 
-            return res.status(401).json({error:"Email already in use"});
+        throw new APIErrors(401,"User Alredy Exist.. Please Login")
 
         }
 
@@ -36,14 +38,14 @@ routes.post('/createuser',async(req,res)=>{
         }
 
         const authToken= jwt.sign(userId,process.env.JWT_SECRET)
-        success=true
+        
 
-        res.status(201).json({success,authToken})
+        res.status(201).json(new APIResponce(201,authToken,"User SuccessFully Created.."))
 
 
 
     } catch (error) {
-        res.status(401).send("Internal Server Found")
+        res.status(401).json(new APIErrors(401,"Internal Server Error",error))
         
     }
 })
@@ -52,19 +54,19 @@ routes.post('/createuser',async(req,res)=>{
 
 routes.post('/login',async(req,res)=>{
     try {
-        let success=false
+        
         const {email,password}=req.body
         if(!email || !password ){
-            res.status(401).send("Fild cant Empty")
+            res.status(401).json(new APIErrors(401,"Inpute Fild Can Not To be Blank...!"))
         }
 
         const user=await User.findOne({email:email})
         if (!user){
-            res.status(401).send('User not found')
+            res.status(401).json(new APIErrors(401,"User Can Not Exist, Please Sinup First..!"))
         }
 
         const passCompare=await bcrypt.compare(password,user.password)
-        console.log(passCompare);
+    
         const userId={
             user:{
                 user:user.id
@@ -72,16 +74,16 @@ routes.post('/login',async(req,res)=>{
         }
     
         if(!passCompare){
-            res.status(401).send("Invalid Password")
+            res.status(401).json(new APIErrors(401,"Password Is Wrong..!"))
         }
 
         const authToken= jwt.sign(userId,process.env.JWT_SECRET)
-        success=true
+    
     
 
-        res.status(201).json({success,authToken})
+        res.status(201).json(new APIResponce(201,authToken,"User Login SuccessFully..!"))
     } catch (error) {
-        res.status(401).send("Internal Error")
+        res.status(401).json(new APIErrors(401,"Internal Server Found",error))
     }
 })
 
