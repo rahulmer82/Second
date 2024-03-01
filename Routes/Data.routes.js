@@ -11,7 +11,7 @@ const data=await UserData.find({user:req.user.id})
 if(!data){
     throw new APIErrors(401,'No Data Found')
 }
-res.status(201).json(new APIRescponce(201,data,"Data SuccessFully Fetched"))
+res.status(201).json(new APIRescponce(201,data,"Data SuccessFully Fetched..!"))
     
 } catch (error) {
     res.status(401).json(new APIErrors(401,error.message,error))
@@ -32,7 +32,7 @@ routes.post('/addwork',fetchuser,async(req,res)=>{
         }
        
         const data=await Newnote.save()
-        res.status(201).json(new APIRescponce(201,data,"Work Added Succesfully"))
+        res.status(201).json(new APIRescponce(201,data,"Work Data Added Succesfully...!"))
         
     } catch (error) {
         res.status(402).json(new APIErrors(402,error.message,error))
@@ -46,10 +46,10 @@ routes.delete('/delete/:id',fetchuser,async(req,res)=>{
     try {
         let data=await UserData.findById(req.params.id)
         if (!data) {
-            throw new APIErrors(401,"This Work Note is not Exist.")
+            throw new APIErrors(401,"This Work Data is not Exist.")
           }
           data=await UserData.findByIdAndDelete(req.params.id);
-          res.status(200).json(new APIRescponce(201,data,"Work Deleted Succesfully"));
+          res.status(200).json(new APIRescponce(201,data,"Work Data Deleted Succesfully..!"));
         
     } catch (error) {
         res.status(402).json(new APIRescponce(402,"Internal Server Error Found",error))
@@ -58,7 +58,7 @@ routes.delete('/delete/:id',fetchuser,async(req,res)=>{
 
 //update notes
 
-routes.put('/update/:id',fetchuser,async(req,res)=>{
+routes.patch('/update/:id',fetchuser,async(req,res)=>{
     try {
         const {price,work,date}=req.body
         const newdata={}
@@ -68,17 +68,17 @@ routes.put('/update/:id',fetchuser,async(req,res)=>{
 
         let note=await UserData.findById(req.params.id)
       if(!note){
-          throw new APIErrors(401, "Work Note Not Found")
+          throw new APIErrors(401, "Data Not Found...!")
         }
-        if(note.user.toString() !==req.user.id){
-          throw new APIErrors(401,"This Is not Vaid Requiest..")
-        };
+        // if(note.user.toString() !==req.user.id){
+        //   throw new APIErrors(401,"This Is not Vaid Requiest..")
+        // };
 
          note=await UserData.findByIdAndUpdate(req.params.id,{$set:newdata},{new:true})
 
-         res.status(201).json(new APIRescponce(201,note,"Work Not SuccessFully Updated..!"))
+         res.status(201).json(new APIRescponce(201,note,"Data  SuccessFully Updated..!"))
     } catch (error) {
-        res.status(402).json(new APIErrors(401,"Internal Server Errors",error))
+        res.status(402).json(new APIErrors(402,"Internal Server Errors",error))
     }
 })
 

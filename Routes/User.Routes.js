@@ -18,7 +18,7 @@ routes.post('/createuser',async(req,res)=>{
         if(user){
             //User not exist
 
-        throw new APIErrors(401,"User Alredy Exist.. Please Login")
+        throw new APIErrors(401,"User Alredy Exist.. Please Login..!")
 
         }
 
@@ -40,7 +40,7 @@ routes.post('/createuser',async(req,res)=>{
         const authToken= jwt.sign(userId,process.env.JWT_SECRET)
         
 
-        res.status(201).json(new APIResponce(201,authToken,"User SuccessFully Created.."))
+        res.status(201).json(new APIResponce(201,authToken,"User SuccessFully Created...!"))
 
 
 
@@ -74,7 +74,7 @@ routes.post('/login',async(req,res)=>{
         }
     
         if(!passCompare){
-            res.status(401).json(new APIErrors(401,"Password Is Wrong..!"))
+            res.status(401).json(new APIErrors(401,"Wrong Password..! ,Please Inpute  Valid Password."))
         }
 
         const authToken= jwt.sign(userId,process.env.JWT_SECRET)
