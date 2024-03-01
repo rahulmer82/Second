@@ -8,7 +8,7 @@ app.use(express.json())
 
 ConnectDb()
 const corsOptions = {
-    origin: "http://task-tally.netlify.app" // frontend URI (ReactJS)
+    origin: "https://task-tally.onrender.com" // frontend URI (ReactJS)
 }
 app.use(cors(corsOptions))
 
